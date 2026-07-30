@@ -1,6 +1,5 @@
-from dataset_loader import load_dataset
+from load_dataset import load_dataset
 
-df = load_dataset("datasets/swat/swat.csv")
+df = load_dataset("./data/swat.csv")
 
-print(df.shape)
-print(df.columns)
+print(df.head())
