@@ -208,15 +208,6 @@ This project sits at the intersection of:
 
 ## Author
 
+**Shaharsha Pilakkal**
+**Muhamed Janish C**
 **Noufan Elachola**
-
-B.Tech Computer Science and Engineering
-
-Interests:
-
-- Operational Technology (OT) Security
-- Industrial Control Systems (ICS)
-- SCADA Systems
-- Cyber-Physical Systems
-- Industrial Automation
-- Industrial Data Analytics
