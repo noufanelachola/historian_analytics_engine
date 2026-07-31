@@ -1,4 +1,5 @@
 import re
+import pandas as pd
 
 asset_types = {
     "FIT": "Flow Indicator Transmitter",
@@ -48,3 +49,11 @@ def get_asset_info(asset):
 #         return match.group(1)
 
 #     return None
+
+def save_asset_classification(assets_info, path):
+    inventory = pd.DataFrame({
+        "S.no": range(1, len(assets_info) + 1),
+        "Asset": assets_info
+    })
+
+    inventory.to_csv(path, index=False)
