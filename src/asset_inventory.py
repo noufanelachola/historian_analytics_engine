@@ -1,7 +1,6 @@
 import pandas as pd
 
 def get_assets(data):
-    print(data.columns)
     assets = list(data.columns)
 
     # Since the Timestamp column is not an asset, we remove it from the list of assets
@@ -23,7 +22,6 @@ def save_inventory(assets, path):
     inventory.to_csv(path, index=False)
 
 def generate_summary(assets):
-
     print("\nASSET INVENTORY")
     print("====================")
 
