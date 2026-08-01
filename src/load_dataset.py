@@ -6,6 +6,4 @@ def load_dataset(path):
     # Strip whitespace from the column names
     df.columns = df.columns.str.strip()  
 
-    print(df["Normal/Attack"].value_counts())
-
     return df
