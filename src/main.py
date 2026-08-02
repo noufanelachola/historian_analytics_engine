@@ -1,7 +1,7 @@
 from load_dataset import load_dataset
 from asset_inventory import *
 from asset_classifier import classify_asset, save_asset_classification
-from asset_profiler import profile_asset
+from asset_profiler import profile_assets
 
 df = load_dataset("./data/swat.csv")
 assets = get_assets(df)
@@ -35,4 +35,4 @@ assets = get_assets(df)
 
 #     print("-" * 50) 
 
-print(profile_asset(df, "P101"))
+print(profile_assets(df, assets))

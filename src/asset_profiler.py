@@ -1,5 +1,16 @@
 import pandas as pd 
 
+def profile_assets(df, assets):
+    profiles = []
+    
+    for asset in assets:
+        profile = profile_asset(df, asset)
+        profiles.append(profile)
+
+    save_asset_profiles(profiles, "./reports/asset_profiles.csv")
+
+    return profiles
+
 def profile_asset(df, asset):
     series = df[asset]
     unique_count = series.nunique()
@@ -37,4 +48,6 @@ def digital_profiler(series):
         "state_counts": series.value_counts().to_dict()
     }
 
-
+def save_asset_profiles(profiles, path):
+    df = pd.DataFrame(profiles)
+    df.to_csv(path, index=False)
