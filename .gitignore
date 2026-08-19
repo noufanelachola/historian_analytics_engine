@@ -1,1 +1,3 @@
 .venv
+/data/swat_normal.csv
+/data/attack.csv
