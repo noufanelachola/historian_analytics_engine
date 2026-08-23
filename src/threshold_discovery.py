@@ -1,28 +1,5 @@
 import pandas as pd
 
-def generate_threshold_report(
-    actuator,
-    process_variable,
-    rise_stats,
-    fall_stats
-):
-
-    report = pd.DataFrame([
-        {
-            "Actuator": actuator,
-            "Process Variable": process_variable,
-
-            "Rise Median": rise_stats["median"],
-            "Rise Q25": rise_stats["q25"],
-            "Rise Q75": rise_stats["q75"],
-
-            "Fall Median": fall_stats["median"],
-            "Fall Q25": fall_stats["q25"],
-            "Fall Q75": fall_stats["q75"]
-        }
-    ])
-
-    return report
 
 
 def find_state_transitions(df, asset):
@@ -95,3 +72,49 @@ def estimate_threshold(values):
         "q25": values.quantile(0.25),
         "q75": values.quantile(0.75)
     }
+
+def generate_threshold_report(actuator, process_variable, rise_stats, fall_stats):
+
+    report = pd.DataFrame([
+        {
+            "Actuator": actuator,
+            "Process Variable": process_variable,
+
+            "Rise Median": rise_stats["median"],
+            "Rise Q25": rise_stats["q25"],
+            "Rise Q75": rise_stats["q75"],
+
+            "Fall Median": fall_stats["median"],
+            "Fall Q25": fall_stats["q25"],
+            "Fall Q75": fall_stats["q75"]
+        }
+    ])
+
+    return report
+
+def discover_threshold(df, actuator, process_variable):
+
+    transitions = get_transition_values(
+        df,
+        actuator,
+        process_variable
+    )
+
+    rise, fall = split_transitions(transitions)
+
+    rise_stats = estimate_threshold(
+        rise[process_variable]
+    )
+
+    fall_stats = estimate_threshold(
+        fall[process_variable]
+    )
+
+    return generate_threshold_report(
+        actuator,
+        process_variable,
+        rise_stats,
+        fall_stats
+    )
+
+    

@@ -3,8 +3,9 @@ from asset_inventory import *
 from asset_classifier import classify_asset, save_asset_classification
 from asset_profiler import profile_assets
 from threshold_discovery import *
+from relationship_discovery import *
 
-df = load_dataset("./data/swat.csv")
+df = load_dataset("./data/swat_normal.csv")
 assets = get_assets(df)
 
 # save_inventory(assets, "./reports/asset_inventory.csv")
@@ -39,8 +40,8 @@ assets = get_assets(df)
 
 # print(profile_assets(df, assets))
 
-print("======================")
-print("\nP101 STATE TRANSITIONS")
+# print("======================")
+# print("\nP101 STATE TRANSITIONS")
 
 transitions = find_transition_conditions(
     df,
@@ -48,31 +49,31 @@ transitions = find_transition_conditions(
     "LIT101"
 )
 
-print(transitions.head())
+# print(transitions.head())
 
-print("======================")
-print("\nSplitt")
+# print("======================")
+# print("\nSplitt")
 
 rise, fall = split_transitions(transitions)
 rise_levels = rise["LIT101"]
 fall_levels = fall["LIT101"]
 
-print("\nRise Transitions")
-print(rise)
+# print("\nRise Transitions")
+# print(rise)
 rise_stats = estimate_threshold(rise_levels)
 
-print()
-print(rise_stats)
+# print()
+# print(rise_stats)
 
-print("\nFall Transitions")
-print(fall)
+# print("\nFall Transitions")
+# print(fall)
 fall_stats = estimate_threshold(fall_levels)
-print()
-print(fall_stats)
+# print()
+# print(fall_stats)
 
 
 
-print("\nCount")
+# print("\nCount")
 report = discover_threshold(
     df,
     "P101",
@@ -80,4 +81,40 @@ report = discover_threshold(
 )
 report.to_csv("./reports/threshold_report.csv", index=False)
 
-print(report)
+# print(report)
+
+
+correlation_matrix = calculate_correlations(df)
+save_correlation_matrix(
+    correlation_matrix,
+    "./reports/correlation_matrix.csv"
+)
+
+print(correlation_matrix.head())
+print()
+
+
+related_assets = find_related_assets(
+    df,
+    "P101"
+)
+
+print("\nRELATED ASSETS FOR P101")
+print("=======================")
+
+print(related_assets)
+
+relationship_report = generate_relationship_report(
+    df,
+    "P101"
+)
+
+print("\nRELATIONSHIP REPORT")
+print("===================")
+
+print(relationship_report)
+
+relationship_report.to_csv(
+    "./reports/p101_relationship_report.csv",
+    index=False
+)
