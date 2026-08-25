@@ -1,0 +1,52 @@
+asset,asset_type,asset_stage,category,min,max,mean,median,std,unique_count,start_threshold,stop_threshold,process_variable,related_assets,state_counts
+FIT101,Flow Indicator Transmitter,1,Analog,0.0,2.760145,1.8461958938421001,2.492073,1.1344995265447682,3903,,,,[],
+LIT101,Level Indicator Transmitter,1,Analog,120.6237,1000.0,587.8316852808525,525.8692,120.43427199085922,11155,,,,[],
+MV101,Motorized Valve,1,Digital,,,,,,3,,,,"['LIT101', 'LIT301', 'LIT401']","{2.0: 284754, 1.0: 108394, 0.0: 2150}"
+P101,Pump,1,Digital,,,,,,2,531.77675,812.5321,LIT101,"['LIT301', 'LIT401', 'LIT101']","{2: 1038959, 1: 348139}"
+P102,Pump,1,Digital,,,,,,2,,,,"['LIT101', 'LIT301', 'LIT401']","{1: 1387002, 2: 96}"
+AIT201,Analyzer Indicator Transmitter,2,Analog,168.0338,267.7198,211.4123958573026,199.6603,36.041028327731425,2105,,,,[],
+AIT202,Analyzer Indicator Transmitter,2,Analog,6.0,8.988273,8.427363573438214,8.377851,0.11352630501149567,1763,,,,[],
+AIT203,Analyzer Indicator Transmitter,2,Analog,285.3371,567.4699,339.6615352662897,329.9667,44.657296576756096,6654,,,,[],
+FIT201,Flow Indicator Transmitter,2,Analog,0.0,2.823695,1.8346356952568539,2.444623,1.0598439635180779,4673,,,,[],
+MV201,Motorized Valve,2,Digital,,,,,,3,,,,[],"{2.0: 297512, 1.0: 96050, 0.0: 1736}"
+P201,Pump,2,Digital,,,,,,2,,,,[],"{1.0: 341566, 2.0: 53732}"
+P202,Pump,2,Digital,,,,,,1,,,,[],{1.0: 395298}
+P203,Pump,2,Digital,,,,,,2,,,,[],"{2: 1036145, 1: 350953}"
+P204,Pump,2,Digital,,,,,,1,,,,[],{1.0: 395298}
+P205,Pump,2,Digital,,,,,,2,,,,[],"{2: 951336, 1: 435762}"
+P206,Pump,2,Digital,,,,,,1,,,,[],{1: 1387098}
+DPIT301,Differential Pressure Indicator Transmitter,3,Analog,0.0,45.0,16.659653205662572,19.85402,6.738137014115887,5174,,,,[],
+FIT301,Flow Indicator Transmitter,3,Analog,0.0,2.376197,1.841327105017216,2.211447,0.8141591451369552,8148,,,,[],
+LIT301,Level Indicator Transmitter,3,Analog,132.8185,1201.0,899.7895974196488,918.3943,91.49719573525772,10600,,,,[],
+MV301,Motorized Valve,3,Digital,,,,,,3,,,,[],"{1: 1369134, 2: 13017, 0: 4947}"
+MV302,Motorized Valve,3,Digital,,,,,,3,,,,[],"{2: 1124674, 1: 253058, 0: 9366}"
+MV303,Motorized Valve,3,Digital,,,,,,3,,,,[],"{1.0: 381562, 2.0: 11681, 0.0: 2055}"
+MV304,Motorized Valve,3,Digital,,,,,,3,,,,[],"{1: 1331624, 2: 45483, 0: 9991}"
+P301,Pump,3,Digital,,,,,,2,,,,[],"{1: 1383348, 2: 3750}"
+P302,Pump,3,Digital,,,,,,2,,,,[],"{2: 1146530, 1: 240568}"
+AIT401,Analyzer Indicator Transmitter,4,Analog,0.0,148.8561,131.4201002464005,148.8032,47.79741298000216,37,,,,[],
+AIT402,Analyzer Indicator Transmitter,4,Analog,141.1177,327.839,165.13737012662406,162.9839,14.933649700068555,2636,,,,[],
+FIT401,Flow Indicator Transmitter,4,Analog,0.0,1.747862,1.7062586810942981,1.712107,0.10156017949211336,765,,,,[],
+LIT401,Level Indicator Transmitter,4,Analog,130.3896,1003.935,881.1781756973191,891.9636,92.15686853440343,14823,,,,[],
+P401,Pump,4,Digital,,,,,,1,,,,[],{1: 1387098}
+P402,Pump,4,Digital,,,,,,2,,,,[],"{2: 1382387, 1: 4711}"
+P403,Pump,4,Digital,,,,,,2,,,,[],"{1: 1387038, 2: 60}"
+P404,Pump,4,Digital,,,,,,1,,,,[],{1: 1387098}
+UV401,UV Disinfection Unit,4,Digital,,,,,,2,,,,[],"{2: 1382316, 1: 4782}"
+AIT501,Analyzer Indicator Transmitter,5,Analog,7.303769,8.307037,7.852702895191256,7.863561,0.05427538680765661,1348,,,,[],
+AIT502,Analyzer Indicator Transmitter,5,Analog,129.8385,272.8531,154.34047447152258,148.7824,13.994921827881837,2487,,,,[],
+AIT503,Analyzer Indicator Transmitter,5,Analog,244.9052,297.2635,266.2128881546942,267.0469,5.8012807358404,1109,,,,[],
+AIT504,Analyzer Indicator Transmitter,5,Analog,7.344271,442.4635,12.822443392708372,12.07383,7.156737427372225,514,,,,[],
+FIT501,Flow Indicator Transmitter,5,Analog,0.0007690336,1.757754,1.7161824874485232,1.722251,0.1014930143393749,745,,,,[],
+FIT502,Flow Indicator Transmitter,5,Analog,0.000640451,1.361983,1.2753790421853337,1.281286,0.0776192798139182,1207,,,,[],
+FIT503,Flow Indicator Transmitter,5,Analog,0.001024229,0.7636911,0.7343102088020788,0.7352687,0.043606640440723585,368,,,,[],
+FIT504,Flow Indicator Transmitter,5,Analog,0.0,0.3170099,0.3067029973945298,0.3081703,0.018737644634946676,240,,,,[],
+P501,Pump,5,Digital,,,,,,2,,,,[],"{2: 1382096, 1: 5002}"
+P502,Pump,5,Digital,,,,,,1,,,,[],{1: 1387098}
+PIT501,Pressure Indicator Transmitter,5,Analog,8.891951,264.6437,250.82780731078412,251.474,14.501605253906638,1118,,,,[],
+PIT502,Pressure Indicator Transmitter,5,Analog,0.0,3.668343,1.1578005984142865,1.105309,0.24437105607138798,111,,,,[],
+PIT503,Pressure Indicator Transmitter,5,Analog,3.108177,200.6376,189.8608582639496,190.1275,11.314621963661207,1030,,,,[],
+FIT601,Flow Indicator Transmitter,6,Analog,0.0,1.80271,0.015224150196800125,6.407587e-05,0.15303594458236439,5840,,,,[],
+P601,Pump,6,Digital,,,,,,1,,,,[],{1: 1387098}
+P602,Pump,6,Digital,,,,,,2,,,,[],"{1: 1375478, 2: 11620}"
+P603,Pump,6,Digital,,,,,,1,,,,[],{1: 1387098}
