@@ -1,120 +1,147 @@
+import time
+import pandas as pd
+
 from load_dataset import load_dataset
-from asset_inventory import *
-from asset_classifier import classify_asset, save_asset_classification
-from asset_profiler import profile_assets
-from threshold_discovery import *
-from relationship_discovery import *
+
+from asset_inventory import get_assets
+from asset_classifier import is_actuator
+
+from threshold_discovery import discover_threshold
+
+from relationship_discovery import (
+    calculate_correlations,
+    save_correlation_matrix,
+    discover_relationships
+)
+
+from process_graph import (
+    build_process_graph,
+    save_process_graph
+)
+
+# ==================================
+# LOAD DATASET
+# ==================================
+
+print("Loading dataset...")
 
 df = load_dataset("./data/swat_normal.csv")
+
 assets = get_assets(df)
 
-# save_inventory(assets, "./reports/asset_inventory.csv")
+print(f"\nTotal Assets: {len(assets)}")
 
-# print(df.head())
-# print(assets)
-# print(f"Total Assets: {len(assets)}")
+# ==================================
+# FIND ACTUATORS
+# ==================================
 
-# generate_summary(assets)
+actuators = [
+    asset
+    for asset in assets
+    if is_actuator(asset)
+]
 
-# print("\n ")
+print("\nACTUATORS")
+print("==========")
 
-# asset_info_list = []
-# for asset in assets:
-#     info = classify_asset(asset)
-#     asset_info_list.append(info)
+for actuator in actuators:
+    print(actuator)
 
-# save_asset_classification(asset_info_list, "./reports/asset_classification.csv")
+# ==================================
+# THRESHOLD DISCOVERY
+# ==================================
 
-# print(f"Assets : {assets}")
+print("\nGenerating Threshold Report...")
 
-# for asset in assets:
-
-#     if df[asset].nunique() > 5:
-#         continue    
-#     print(f"\nAsset: {asset}")
-
-#     print("\nUnique Values:")
-#     print(df[asset].nunique())
-
-#     print("-" * 50) 
-
-# print(profile_assets(df, assets))
-
-# print("======================")
-# print("\nP101 STATE TRANSITIONS")
-
-transitions = find_transition_conditions(
+threshold_report = discover_threshold(
     df,
     "P101",
     "LIT101"
 )
 
-# print(transitions.head())
-
-# print("======================")
-# print("\nSplitt")
-
-rise, fall = split_transitions(transitions)
-rise_levels = rise["LIT101"]
-fall_levels = fall["LIT101"]
-
-# print("\nRise Transitions")
-# print(rise)
-rise_stats = estimate_threshold(rise_levels)
-
-# print()
-# print(rise_stats)
-
-# print("\nFall Transitions")
-# print(fall)
-fall_stats = estimate_threshold(fall_levels)
-# print()
-# print(fall_stats)
-
-
-
-# print("\nCount")
-report = discover_threshold(
-    df,
-    "P101",
-    "LIT101"
+threshold_report.to_csv(
+    "./reports/threshold_report.csv",
+    index=False
 )
-report.to_csv("./reports/threshold_report.csv", index=False)
 
-# print(report)
+# ==================================
+# CORRELATION ANALYSIS
+# ==================================
 
+print("\nGenerating Correlation Matrix...")
 
 correlation_matrix = calculate_correlations(df)
+
 save_correlation_matrix(
     correlation_matrix,
     "./reports/correlation_matrix.csv"
 )
 
-print(correlation_matrix.head())
-print()
+# ==================================
+# RELATIONSHIP DISCOVERY
+# ==================================
 
+print("\nDiscovering Relationships...")
 
-related_assets = find_related_assets(
-    df,
-    "P101"
+start_time = time.time()
+
+all_relationships = []
+
+# Only analyze first 3 actuators for now
+for actuator in actuators[:3]:
+
+    print(f"\nAnalyzing {actuator}...")
+
+    report = discover_relationships(
+        df,
+        actuator,
+        assets
+    )
+
+    # Keep only top 3 relationships
+    top_report = report.head(3)
+
+    all_relationships.append(
+        top_report
+    )
+
+master_report = pd.concat(
+    all_relationships,
+    ignore_index=True
 )
 
-print("\nRELATED ASSETS FOR P101")
-print("=======================")
-
-print(related_assets)
-
-relationship_report = generate_relationship_report(
-    df,
-    "P101"
-)
-
-print("\nRELATIONSHIP REPORT")
-print("===================")
-
-print(relationship_report)
-
-relationship_report.to_csv(
-    "./reports/p101_relationship_report.csv",
+master_report.to_csv(
+    "./reports/master_relationship_report.csv",
     index=False
 )
+
+print("\nMASTER REPORT")
+print("=============")
+
+print(master_report)
+
+end_time = time.time()
+
+print(
+    f"\nRelationship Discovery Time: "
+    f"{end_time - start_time:.2f} seconds"
+)
+
+# ==================================
+# PROCESS GRAPH
+# ==================================
+
+print("\nGenerating Process Graph...")
+
+graph = build_process_graph(
+    master_report
+)
+
+save_process_graph(
+    graph,
+    "./reports/process_graph.png"
+)
+
+print("\nProcess graph saved.")
+
+print("\nDone.")

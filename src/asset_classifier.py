@@ -12,6 +12,14 @@ asset_types = {
     "UV": "UV Disinfection Unit"
 }
 
+def is_actuator(asset):
+    info = classify_asset(asset)
+
+    return info["asset_type"] in [
+        "Pump",
+        "Motorized Valve"
+    ]
+
 def classify_asset(asset):
     asset_info = get_asset_info(asset)
 
@@ -41,14 +49,6 @@ def get_asset_info(asset):
         }
 
     return None
-
-# def get_asset_number(asset):
-#     match = re.search(r"(\d+)", asset)
-
-#     if match:
-#         return match.group(1)
-
-#     return None
 
 def save_asset_classification(assets_info, path):
     inventory = pd.DataFrame({
