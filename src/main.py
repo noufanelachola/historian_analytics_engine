@@ -19,6 +19,10 @@ from process_graph import (
     save_process_graph
 )
 
+from historian_intelligence import *
+
+from relationship_confidence import *
+
 # ==================================
 # LOAD DATASET
 # ==================================
@@ -115,6 +119,24 @@ master_report.to_csv(
     index=False
 )
 
+print("\nGenerating Historian Intelligence Report...")
+
+plant_intelligence = build_plant_intelligence(
+    df,
+    assets,
+    master_report,
+    threshold_report
+)
+
+pd.DataFrame(
+    plant_intelligence
+).to_csv(
+    "./reports/historian_intelligence_report.csv",
+    index=False
+)
+
+print("\nHistorian Intelligence Report Saved.")
+
 print("\nMASTER REPORT")
 print("=============")
 
@@ -126,6 +148,20 @@ print(
     f"\nRelationship Discovery Time: "
     f"{end_time - start_time:.2f} seconds"
 )
+
+
+
+plant_intelligence = (
+    build_plant_intelligence(
+        df,
+        assets,
+        master_report,
+        threshold_report
+    )
+)
+
+print ("Plant intellignece")
+print(plant_intelligence)
 
 # ==================================
 # PROCESS GRAPH
@@ -145,3 +181,29 @@ save_process_graph(
 print("\nProcess graph saved.")
 
 print("\nDone.")
+
+print("\nCONFIDENCE RELATIONSHIPS")
+print("========================")
+
+candidate_assets = get_assets_in_same_stage(
+    "P101",
+    assets
+)
+
+confidence_report = discover_confidence_relationships(
+    df,
+    "P101",
+    candidate_assets
+)
+
+print(candidate_assets)
+print(f"Total Candidates: {len(candidate_assets)}")
+
+print(
+    confidence_report.head(20)
+)
+
+confidence_report.to_csv(
+    "./reports/p101_confidence_report.csv",
+    index=False
+)
