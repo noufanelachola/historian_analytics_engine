@@ -23,6 +23,10 @@ from historian_intelligence import *
 
 from relationship_confidence import *
 
+from relationship_correlation import *
+
+from process_reconstruction import *
+
 # ==================================
 # LOAD DATASET
 # ==================================
@@ -72,14 +76,14 @@ threshold_report.to_csv(
 # CORRELATION ANALYSIS
 # ==================================
 
-print("\nGenerating Correlation Matrix...")
+# print("\nGenerating Correlation Matrix...")
 
-correlation_matrix = calculate_correlations(df)
+# correlation_matrix = calculate_correlations(df)
 
-save_correlation_matrix(
-    correlation_matrix,
-    "./reports/correlation_matrix.csv"
-)
+# save_correlation_matrix(
+#     correlation_matrix,
+#     "./reports/correlation_matrix.csv"
+# )
 
 # ==================================
 # RELATIONSHIP DISCOVERY
@@ -114,96 +118,136 @@ master_report = pd.concat(
     ignore_index=True
 )
 
+stage_report = build_stage_relationships(
+    master_report
+)
+
+print("\nSTAGE RELATIONSHIPS")
+print("===================")
+
+print(stage_report.head(20))
+
+stage_report.to_csv(
+    "./reports/stage_relationships.csv",
+    index=False
+)
+
 master_report.to_csv(
     "./reports/master_relationship_report.csv",
     index=False
 )
 
-print("\nGenerating Historian Intelligence Report...")
+# print("\nGenerating Historian Intelligence Report...")
 
-plant_intelligence = build_plant_intelligence(
-    df,
-    assets,
-    master_report,
-    threshold_report
-)
+# plant_intelligence = build_plant_intelligence(
+#     df,
+#     assets,
+#     master_report,
+#     threshold_report
+# )
 
-pd.DataFrame(
-    plant_intelligence
-).to_csv(
-    "./reports/historian_intelligence_report.csv",
-    index=False
-)
+# pd.DataFrame(
+#     plant_intelligence
+# ).to_csv(
+#     "./reports/historian_intelligence_report.csv",
+#     index=False
+# )
 
-print("\nHistorian Intelligence Report Saved.")
+# print("\nHistorian Intelligence Report Saved.")
 
-print("\nMASTER REPORT")
-print("=============")
+# print("\nMASTER REPORT")
+# print("=============")
 
-print(master_report)
+# print(master_report)
 
-end_time = time.time()
+# end_time = time.time()
 
-print(
-    f"\nRelationship Discovery Time: "
-    f"{end_time - start_time:.2f} seconds"
-)
+# print(
+#     f"\nRelationship Discovery Time: "
+#     f"{end_time - start_time:.2f} seconds"
+# )
 
 
 
-plant_intelligence = (
-    build_plant_intelligence(
-        df,
-        assets,
-        master_report,
-        threshold_report
-    )
-)
+# plant_intelligence = (
+#     build_plant_intelligence(
+#         df,
+#         assets,
+#         master_report,
+#         threshold_report
+#     )
+# )
 
-print ("Plant intellignece")
-print(plant_intelligence)
+# print ("Plant intellignece")
+# print(plant_intelligence)
 
 # ==================================
 # PROCESS GRAPH
 # ==================================
 
-print("\nGenerating Process Graph...")
+# print("\nGenerating Process Graph...")
 
-graph = build_process_graph(
-    master_report
-)
+# graph = build_process_graph(
+#     master_report
+# )
 
-save_process_graph(
-    graph,
-    "./reports/process_graph.png"
-)
+# save_process_graph(
+#     graph,
+#     "./reports/process_graph.png"
+# )
 
-print("\nProcess graph saved.")
+# print("\nProcess graph saved.")
 
 print("\nDone.")
 
-print("\nCONFIDENCE RELATIONSHIPS")
-print("========================")
+# print("\nCONFIDENCE RELATIONSHIPS")
+# print("========================")
+
+# candidate_assets = get_assets_in_same_stage(
+#     "P101",
+#     assets
+# )
+
+# confidence_report = discover_confidence_relationships(
+#     df,
+#     "P101",
+#     candidate_assets
+# )
+
+# print(candidate_assets)
+# print(f"Total Candidates: {len(candidate_assets)}")
+
+# print(
+#     confidence_report.head(20)
+# )
+
+# confidence_report.to_csv(
+#     "./reports/p101_confidence_report.csv",
+#     index=False
+# )
+
+
+print("\nCORRELATION RELATIONSHIPS")
+print("=========================")
 
 candidate_assets = get_assets_in_same_stage(
     "P101",
     assets
 )
 
-confidence_report = discover_confidence_relationships(
-    df,
-    "P101",
-    candidate_assets
+correlation_report = (
+    discover_correlation_relationships(
+        df,
+        "P101",
+        candidate_assets
+    )
 )
-
-print(candidate_assets)
-print(f"Total Candidates: {len(candidate_assets)}")
 
 print(
-    confidence_report.head(20)
+    correlation_report.head(20)
 )
 
-confidence_report.to_csv(
-    "./reports/p101_confidence_report.csv",
+correlation_report.to_csv(
+    "./reports/p101_correlation_report.csv",
     index=False
 )
