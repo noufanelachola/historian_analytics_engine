@@ -26,6 +26,7 @@ from relationship_confidence import *
 from relationship_correlation import *
 
 from process_reconstruction import *
+from soft_sensor import *
 
 # ==================================
 # LOAD DATASET
@@ -249,5 +250,99 @@ print(
 
 correlation_report.to_csv(
     "./reports/p101_correlation_report.csv",
+    index=False
+)
+
+# print("\nTRAINING SOFT SENSOR")
+# print("====================")
+
+# soft_sensor_result = train_soft_sensor(
+#     df
+# )
+
+# print("\nMODEL PERFORMANCE")
+# print("=================")
+
+# print(
+#     f"MAE  : "
+#     f"{soft_sensor_result['mae']}"
+# )
+
+# print(
+#     f"RMSE : "
+#     f"{soft_sensor_result['rmse']}"
+# )
+
+# print(
+#     f"R²   : "
+#     f"{soft_sensor_result['r2']}"
+# )
+
+
+# print("\nFEATURE IMPORTANCE")
+# print("==================")
+
+# print(
+#     soft_sensor_result[
+#         "feature_importance"
+#     ]
+# )
+
+
+# soft_sensor_result[
+#     "feature_importance"
+# ].to_csv(
+#     "./reports/soft_sensor_feature_importance.csv",
+#     index=False
+# )
+
+
+# soft_sensor_result[
+#     "predictions"
+# ].to_csv(
+#     "./reports/soft_sensor_predictions.csv",
+#     index=False
+# )
+
+print("\nVIRTUAL SENSOR")
+print("====================")
+
+result = train_virtual_sensor(
+    df
+)
+
+print("\nPERFORMANCE")
+print("====================")
+
+print(
+    f"MAE : {result['mae']}"
+)
+
+print(
+    f"RMSE : {result['rmse']}"
+)
+
+print(
+    f"R² : {result['r2']}"
+)
+
+print("\nFEATURE IMPORTANCE")
+print("====================")
+
+print(
+    result["feature_importance"]
+)
+
+result[
+    "feature_importance"
+].to_csv(
+    "./reports/virtual_sensor_importance.csv",
+    index=False
+)
+
+result[
+    "predictions"
+].to_csv(
+    "./reports/virtual_sensor_predictions.csv",
     index=False
 )
