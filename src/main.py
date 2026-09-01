@@ -1,348 +1,100 @@
-import time
-import pandas as pd
+from core.load_dataset import load_dataset
+from core.asset_inventory import get_assets
 
-from load_dataset import load_dataset
-
-from asset_inventory import get_assets
-from asset_classifier import is_actuator
-
-from threshold_discovery import discover_threshold
-
-from relationship_discovery import (
-    calculate_correlations,
-    save_correlation_matrix,
-    discover_relationships
+from ml.dependency_discovery.dependency_discovery import (
+    discover_dependencies,
+    get_assets_in_same_stage,
+    get_assets_in_adjacent_stages
 )
 
-from process_graph import (
-    build_process_graph,
-    save_process_graph
-)
 
-from historian_intelligence import *
 
-from relationship_confidence import *
-
-from relationship_correlation import *
-
-from process_reconstruction import *
-from soft_sensor import *
-
-# ==================================
-# LOAD DATASET
-# ==================================
+## Initial Settings ... ##
 
 print("Loading dataset...")
-
 df = load_dataset("./data/swat_normal.csv")
 
+print()
 assets = get_assets(df)
 
-print(f"\nTotal Assets: {len(assets)}")
+print(f"Total Assets: {len(assets)}")
+print()
 
-# ==================================
-# FIND ACTUATORS
-# ==================================
 
-actuators = [
-    asset
-    for asset in assets
-    if is_actuator(asset)
-]
+### 1. Dependency Discovery ###
 
-print("\nACTUATORS")
-print("==========")
+target_asset = "LIT101"
 
-for actuator in actuators:
-    print(actuator)
+print()
+print("DEPENDENCY DISCOVERY")
+print("====================")
 
-# ==================================
-# THRESHOLD DISCOVERY
-# ==================================
 
-print("\nGenerating Threshold Report...")
+#__ Case 1: Entire Plant __#
 
-threshold_report = discover_threshold(
+all_assets = assets.copy()
+all_assets.remove(target_asset)
+
+print("\nCASE 1 : ENTIRE PLANT")
+print("=====================")
+
+report_all = discover_dependencies(
     df,
-    "P101",
-    "LIT101"
+    target_asset,
+    all_assets
 )
 
-threshold_report.to_csv(
-    "./reports/threshold_report.csv",
+print(report_all)
+
+report_all.to_csv(
+    "./reports/lit101_all_assets.csv",
     index=False
 )
 
-# ==================================
-# CORRELATION ANALYSIS
-# ==================================
+print()
+print("Reports saved.")
+print("Done.")
 
-# print("\nGenerating Correlation Matrix...")
 
-# correlation_matrix = calculate_correlations(df)
+#__ Case 2: SAME STAGE __#
 
-# save_correlation_matrix(
-#     correlation_matrix,
-#     "./reports/correlation_matrix.csv"
-# )
+same_stage_assets = get_assets_in_same_stage(assets, target_asset)
+same_stage_assets.remove(target_asset)
 
-# ==================================
-# RELATIONSHIP DISCOVERY
-# ==================================
-
-print("\nDiscovering Relationships...")
-
-start_time = time.time()
-
-all_relationships = []
-
-# Only analyze first 3 actuators for now
-for actuator in actuators[:3]:
-
-    print(f"\nAnalyzing {actuator}...")
-
-    report = discover_relationships(
-        df,
-        actuator,
-        assets
-    )
-
-    # Keep only top 3 relationships
-    top_report = report.head(3)
-
-    all_relationships.append(
-        top_report
-    )
-
-master_report = pd.concat(
-    all_relationships,
-    ignore_index=True
-)
-
-stage_report = build_stage_relationships(
-    master_report
-)
-
-print("\nSTAGE RELATIONSHIPS")
+print("\nCASE 2 : SAME STAGE")
 print("===================")
 
-print(stage_report.head(20))
+report_same = discover_dependencies(df, target_asset, same_stage_assets)
+print(report_same.head(10))
 
-stage_report.to_csv(
-    "./reports/stage_relationships.csv",
+report_same.to_csv(
+    "./reports/lit101_same_stage.csv",
     index=False
 )
 
-master_report.to_csv(
-    "./reports/master_relationship_report.csv",
+print()
+print("Reports saved.")
+print("Done.")
+
+
+#__ Case 3: ADJACENT STAGE __#
+
+adjacent_assets = get_assets_in_adjacent_stages(assets, target_asset)
+
+adjacent_assets.remove(target_asset)
+
+print("\nCASE 3 : ADJACENT STAGES")
+print("========================")
+
+report_adjacent = discover_dependencies(df, target_asset, adjacent_assets)
+
+print(report_adjacent)
+
+report_adjacent.to_csv(
+    "./reports/lit101_adjacent_stages.csv",
     index=False
 )
 
-# print("\nGenerating Historian Intelligence Report...")
-
-# plant_intelligence = build_plant_intelligence(
-#     df,
-#     assets,
-#     master_report,
-#     threshold_report
-# )
-
-# pd.DataFrame(
-#     plant_intelligence
-# ).to_csv(
-#     "./reports/historian_intelligence_report.csv",
-#     index=False
-# )
-
-# print("\nHistorian Intelligence Report Saved.")
-
-# print("\nMASTER REPORT")
-# print("=============")
-
-# print(master_report)
-
-# end_time = time.time()
-
-# print(
-#     f"\nRelationship Discovery Time: "
-#     f"{end_time - start_time:.2f} seconds"
-# )
-
-
-
-# plant_intelligence = (
-#     build_plant_intelligence(
-#         df,
-#         assets,
-#         master_report,
-#         threshold_report
-#     )
-# )
-
-# print ("Plant intellignece")
-# print(plant_intelligence)
-
-# ==================================
-# PROCESS GRAPH
-# ==================================
-
-# print("\nGenerating Process Graph...")
-
-# graph = build_process_graph(
-#     master_report
-# )
-
-# save_process_graph(
-#     graph,
-#     "./reports/process_graph.png"
-# )
-
-# print("\nProcess graph saved.")
-
-print("\nDone.")
-
-# print("\nCONFIDENCE RELATIONSHIPS")
-# print("========================")
-
-# candidate_assets = get_assets_in_same_stage(
-#     "P101",
-#     assets
-# )
-
-# confidence_report = discover_confidence_relationships(
-#     df,
-#     "P101",
-#     candidate_assets
-# )
-
-# print(candidate_assets)
-# print(f"Total Candidates: {len(candidate_assets)}")
-
-# print(
-#     confidence_report.head(20)
-# )
-
-# confidence_report.to_csv(
-#     "./reports/p101_confidence_report.csv",
-#     index=False
-# )
-
-
-print("\nCORRELATION RELATIONSHIPS")
-print("=========================")
-
-candidate_assets = get_assets_in_same_stage(
-    "P101",
-    assets
-)
-
-correlation_report = (
-    discover_correlation_relationships(
-        df,
-        "P101",
-        candidate_assets
-    )
-)
-
-print(
-    correlation_report.head(20)
-)
-
-correlation_report.to_csv(
-    "./reports/p101_correlation_report.csv",
-    index=False
-)
-
-# print("\nTRAINING SOFT SENSOR")
-# print("====================")
-
-# soft_sensor_result = train_soft_sensor(
-#     df
-# )
-
-# print("\nMODEL PERFORMANCE")
-# print("=================")
-
-# print(
-#     f"MAE  : "
-#     f"{soft_sensor_result['mae']}"
-# )
-
-# print(
-#     f"RMSE : "
-#     f"{soft_sensor_result['rmse']}"
-# )
-
-# print(
-#     f"R²   : "
-#     f"{soft_sensor_result['r2']}"
-# )
-
-
-# print("\nFEATURE IMPORTANCE")
-# print("==================")
-
-# print(
-#     soft_sensor_result[
-#         "feature_importance"
-#     ]
-# )
-
-
-# soft_sensor_result[
-#     "feature_importance"
-# ].to_csv(
-#     "./reports/soft_sensor_feature_importance.csv",
-#     index=False
-# )
-
-
-# soft_sensor_result[
-#     "predictions"
-# ].to_csv(
-#     "./reports/soft_sensor_predictions.csv",
-#     index=False
-# )
-
-print("\nVIRTUAL SENSOR")
-print("====================")
-
-result = train_virtual_sensor(
-    df
-)
-
-print("\nPERFORMANCE")
-print("====================")
-
-print(
-    f"MAE : {result['mae']}"
-)
-
-print(
-    f"RMSE : {result['rmse']}"
-)
-
-print(
-    f"R² : {result['r2']}"
-)
-
-print("\nFEATURE IMPORTANCE")
-print("====================")
-
-print(
-    result["feature_importance"]
-)
-
-result[
-    "feature_importance"
-].to_csv(
-    "./reports/virtual_sensor_importance.csv",
-    index=False
-)
-
-result[
-    "predictions"
-].to_csv(
-    "./reports/virtual_sensor_predictions.csv",
-    index=False
-)
+print()
+print("Reports saved.")
+print("Done.")
