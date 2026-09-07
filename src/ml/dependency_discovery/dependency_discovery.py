@@ -34,18 +34,19 @@ def get_assets_in_adjacent_stages(assets, target_asset):
 
 
 def prepare_dependency_dataset(df, target_asset, candidate_assets):
-    X = df[candidate_assets]
+    columns = candidate_assets + [target_asset]
 
-    X = X.select_dtypes(
+    dataset = df[columns].copy()
+
+    dataset = dataset.select_dtypes(
         include=["number"]
     )
 
-    if "Normal/Attack" in X.columns:
-        X = X.drop(
-            columns=["Normal/Attack"]
-        )
+    dataset = dataset.dropna()
 
-    y = df[target_asset]
+    X = dataset.drop(columns=[target_asset])
+
+    y = dataset[target_asset]
 
     return X, y
 
