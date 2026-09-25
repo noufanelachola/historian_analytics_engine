@@ -6,9 +6,28 @@ from ml.dependency_discovery.consensus_dependency import (
 
 
 def run_consensus():
+    print(
+        pd.read_csv(
+            "reports/dependency_same_stage.csv"
+        ).columns
+    )
+
+    print(
+        pd.read_csv(
+            "reports/dependency_mi_same_stage.csv"
+        ).columns
+    )
+
+    print(
+        pd.read_csv(
+            "reports/dependency_xgb_same_stage.csv"
+        ).columns
+    )
+
+    
 
     rf = pd.read_csv(
-        "reports/dependency_rf_same_stage.csv"
+        "reports/dependency_same_stage.csv"
     )
 
     mi = pd.read_csv(
@@ -30,10 +49,7 @@ def run_consensus():
         index=False
     )
 
-    print(
-        "\nCONSENSUS DEPENDENCY"
-    )
+    print("\nCONSENSUS DEPENDENCY")
+    print("====================")
 
-    print(
-        report.head(20)
-    )
+    print(report.head(20))
