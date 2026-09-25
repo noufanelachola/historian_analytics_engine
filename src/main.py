@@ -5,7 +5,11 @@ from dependency_runner import *
 from dependency_runner_mi import *
 from correlation_runner import *
 from xgboost_runner import *
+
 from consensus_runner import run_consensus
+from dependency_graph_runner import run_dependency_graph
+
+
 
 ## Initial Settings ... ##
 
@@ -31,4 +35,6 @@ print()
 ### 1.3 Dependency Discovery Correlation ###
 # run_dependency_discovery_xgboost(df,assets)
 
-run_consensus()
+# run_consensus()
+
+run_dependency_graph()
