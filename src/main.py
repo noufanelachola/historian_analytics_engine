@@ -9,6 +9,15 @@ from xgboost_runner import *
 from consensus_runner import run_consensus
 from dependency_graph_runner import run_dependency_graph
 
+from automatic_soft_sensor_runner import run_automatic_soft_sensor
+from rf_enhanced_soft_sensor_runner import run_rf_enhanced_soft_sensor
+from xgb_soft_sensor_runner import run_xgb_soft_sensor
+
+from confidence_runner import run_confidence
+
+
+
+
 
 
 ## Initial Settings ... ##
@@ -37,4 +46,11 @@ print()
 
 # run_consensus()
 
-run_dependency_graph()
+# run_dependency_graph()
+
+
+# run_automatic_soft_sensor(df)
+# run_rf_enhanced_soft_sensor(df)
+# run_xgb_soft_sensor(df)
+
+run_confidence()
