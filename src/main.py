@@ -1,6 +1,8 @@
 from core.load_dataset import load_dataset
 from core.asset_inventory import get_assets
 
+from data_validation.timestamp_validator import validate_timestamps
+
 from dependency_runner import *
 from dependency_runner_mi import *
 from correlation_runner import *
@@ -14,7 +16,7 @@ from rf_enhanced_soft_sensor_runner import run_rf_enhanced_soft_sensor
 from xgb_soft_sensor_runner import run_xgb_soft_sensor
 
 from confidence_runner import run_confidence
-
+from dependency_guided_xgb_runner import run_dependency_guided_xgb
 
 
 
@@ -31,6 +33,7 @@ assets = get_assets(df)
 print(f"Total Assets: {len(assets)}")
 print()
 
+validate_timestamps(df)
 
 ### 1.1 Dependency Discovery ###
 # run_dependency_discovery(df, assets)  
@@ -53,4 +56,5 @@ print()
 # run_rf_enhanced_soft_sensor(df)
 # run_xgb_soft_sensor(df)
 
-run_confidence()
+# run_confidence()
+# run_dependency_guided_xgb(df)
